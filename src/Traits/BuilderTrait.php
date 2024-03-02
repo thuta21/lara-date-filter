@@ -30,15 +30,15 @@ trait BuilderTrait
 
         if ($direction->value === 'after') {
             $end->$addToDateMethod($duration);
-            $date = $range->value === 'exclusive' ? $date->$addToDateMethod(1) : $date;
-            $end = $range->value === 'exclusive' ? $end->$subFromDateMethod(1) : $end;
+            $date = $range->value === 'exclusive' ? $date->$addToDateMethod(1)->startOfDay() : $date->startOfDay();
+            $end = $range->value === 'exclusive' ? $end->$subFromDateMethod(1)->endOfDay() : $end->endOfDay();
             return $this->whereBetween($this->getClassVars(), [$date, $end]);
 
         }
         if ($direction->value === 'before') {
             $start->$subFromDateMethod($duration);
-            $date = $range->value === 'exclusive' ? $date->$subFromDateMethod(1) : $date;
-            $start = $range->value === 'exclusive' ? $start->$subFromDateMethod(1) : $start;
+            $date = $range->value === 'exclusive' ? $date->$subFromDateMethod(1)->endOfDay() : $date->endOfDay();
+            $start = $range->value === 'exclusive' ? $start->$addToDateMethod(1)->startOfDay() : $start->startOfDay();
 
             return $this->whereBetween($this->getClassVars(), [$start, $date]);
         }
